@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from core.models import Profile, SkillCategory, Skill, Project, Experience, Education
+from datetime import date
 
 
 class Command(BaseCommand):
