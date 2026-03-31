@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Portfolio Website - Madhini Ganesh Reddy
 
 A modern, production-ready portfolio website with a custom admin dashboard built with Django, Tailwind CSS, and more.
@@ -150,3 +151,7 @@ MIT License
 
 Madhini Ganesh Reddy
 Data Analyst & Machine Learning Engineer
+=======
+# portfolio
+Creating responsive frontend interfaces using Django Templates and powerful backend systems with clean, scalable architecture.
+>>>>>>> 0d8544d70e692bb536dc870b1feac5ac2fb3c91d
