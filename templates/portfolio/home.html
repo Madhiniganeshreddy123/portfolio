@@ -1,0 +1,350 @@
+{% extends 'portfolio/base.html' %}
+{% load static custom_filters %}
+
+{% block title %}Madhini Ganesh Reddy - Data Analyst & ML Engineer{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="hero" class="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-purple-50 dark:from-dark-bg dark:via-dark-bg dark:to-dark-card"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <p class="text-primary-600 dark:text-primary-400 font-medium mb-4">Hello, I'm</p>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4">
+                    <span class="gradient-text">{{ profile.name|default:"Madhini Ganesh Reddy" }}</span>
+                </h1>
+                <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-300 mb-6">
+                    <span id="typing-text" class="typing-cursor">{{ profile.title|safe|default:"Data Analyst & Machine Learning Engineer" }}</span>
+                </p>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-xl">
+                    {{ profile.tagline|default:"Transforming data into actionable insights with Python, ML, and predictive analytics" }}
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projects" class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        View Projects
+                    </a>
+                    <a href="#contact" class="px-8 py-3 border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white font-medium rounded-lg transition-all">
+                        Contact Me
+                    </a>
+                </div>
+                
+                <div class="flex items-center gap-4 mt-8">
+                    {% if profile.github %}
+                    <a href="{{ profile.github }}" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.linkedin %}
+                    <a href="{{ profile.linkedin }}" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.email %}
+                    <a href="mailto:{{ profile.email }}" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="relative" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <div class="relative w-72 h-72 md:w-96 md:h-96 mx-auto">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-400 to-purple-500 rounded-2xl animate-pulse-slow"></div>
+                    <div class="absolute -inset-4 bg-gradient-to-r from-primary-500 to-purple-500 rounded-2xl opacity-30 blur-2xl"></div>
+                    {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="relative w-full h-full object-cover rounded-2xl shadow-2xl">
+                    {% else %}
+                    <div class="relative w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl flex items-center justify-center">
+                        <i class="fas fa-user text-8xl text-white/50"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <a href="#about" class="text-gray-400 hover:text-primary-600">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </a>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-20 bg-white dark:bg-dark-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">About <span class="gradient-text">Me</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Get to know me better</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right">
+                {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="About Me" class="rounded-2xl shadow-2xl w-full">
+                {% else %}
+                <div class="bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl w-full h-80 flex items-center justify-center">
+                    <i class="fas fa-user text-8xl text-white/30"></i>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div data-aos="fade-left" data-aos-delay="200">
+                <h3 class="text-2xl font-bold mb-4">{{ profile.title|safe|default:"Data Analyst & Machine Learning Engineer" }}</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                    {{ profile.about|default:"I am a passionate Data Analyst and Machine Learning Engineer with expertise in transforming complex data into actionable insights. With strong skills in Python, machine learning, and predictive analytics, I help businesses make data-driven decisions." }}
+                </p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 dark:bg-dark-card p-4 rounded-xl">
+                        <i class="fas fa-project-diagram text-primary-600 text-2xl mb-2"></i>
+                        <p class="font-semibold">{{ projects.count|default:"0" }}+ Projects</p>
+                        <p class="text-sm text-gray-500">Completed</p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-dark-card p-4 rounded-xl">
+                        <i class="fas fa-certificate text-primary-600 text-2xl mb-2"></i>
+                        <p class="font-semibold">Fresher</p>
+                        <p class="text-sm text-gray-500">Experience</p>
+                    </div>
+                </div>
+                
+                <a href="#" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium">
+                    <i class="fas fa-download"></i> Download Resume
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="py-20 bg-gray-50 dark:bg-dark-card">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">My <span class="gradient-text">Skills</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Technologies and tools I work with</p>
+        </div>
+        
+        <div class="space-y-12">
+            {% for category in skill_categories %}
+            <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <h3 class="text-xl font-semibold mb-6">{{ category.name }}</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for skill in category.skills.all %}
+                    <div class="bg-white dark:bg-dark-bg p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-2">
+                            {% if skill.icon %}
+                            <i class="{{ skill.icon }} text-primary-600 text-xl"></i>
+                            {% else %}
+                            <i class="fas fa-code text-primary-600 text-xl"></i>
+                            {% endif %}
+                            <span class="font-medium">{{ skill.name }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-dark-border rounded-full h-2">
+                            <div class="skill-bar bg-gradient-to-r from-primary-500 to-purple-500 h-2 rounded-full" style="width: {{ skill.proficiency }}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">{{ skill.proficiency }}%</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="py-20 bg-white dark:bg-dark-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">My <span class="gradient-text">Projects</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Showcasing some of my recent work</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for project in projects %}
+            <div class="project-card group relative bg-white dark:bg-dark-card rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}100">
+                <div class="relative h-48 overflow-hidden">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-project-diagram text-5xl text-white/30"></i>
+                    </div>
+                    {% endif %}
+                    <div class="project-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex items-center justify-center gap-4">
+                        {% if project.demo_link %}
+                        <a href="{{ project.demo_link }}" target="_blank" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-primary-600 hover:text-white transition-all">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% endif %}
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" target="_blank" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-primary-600 hover:text-white transition-all">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors">{{ project.title }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{{ project.description }}</p>
+                    <div class="flex flex-wrap gap-2">
+                        {% for tech in project.tech_stack|split:"," %}
+                        <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs rounded-full">{{ tech|strip }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <i class="fas fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <p class="text-gray-500">No projects to display yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if user.is_authenticated %}
+        <div class="text-center mt-12">
+            <a href="/admin/core/project/add/" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700">
+                <i class="fas fa-plus"></i> Add New Project
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Experience Section -->
+<section id="experience" class="py-20 bg-gray-50 dark:bg-dark-card">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">Experience & <span class="gradient-text">Education</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">My professional journey</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Experience -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <i class="fas fa-briefcase text-primary-600"></i> Experience
+                </h3>
+                <div class="space-y-6">
+                    {% for exp in experiences %}
+                    <div class="bg-white dark:bg-dark-bg p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow" data-aos="fade-right">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-lg font-semibold">{{ exp.title }}</h4>
+                            {% if exp.is_current %}
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Current</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-primary-600 font-medium">{{ exp.company }}</p>
+                        <p class="text-gray-500 text-sm mb-3">{{ exp.start_date|date:"M Y" }} - {% if exp.end_date %}{{ exp.end_date|date:"M Y" }}{% else %}Present{% endif %}</p>
+                        <p class="text-gray-600 dark:text-gray-400">{{ exp.description }}</p>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500">No experience added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Education -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <i class="fas fa-graduation-cap text-primary-600"></i> Education
+                </h3>
+                <div class="space-y-6">
+                    {% for edu in education %}
+                    <div class="bg-white dark:bg-dark-bg p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow" data-aos="fade-left">
+                        <h4 class="text-lg font-semibold mb-2">{{ edu.degree }}</h4>
+                        <p class="text-primary-600 font-medium">{{ edu.institution }}</p>
+                        <p class="text-gray-500 text-sm">{{ edu.start_year }} - {% if edu.end_year %}{{ edu.end_year }}{% else %}Present{% endif %}</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">{{ edu.description }}</p>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500">No education added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 bg-white dark:bg-dark-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">Get In <span class="gradient-text">Touch</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Have a question or want to work together?</p>
+        </div>
+        
+        <div class="max-w-2xl mx-auto">
+            <form method="post" class="space-y-6" data-aos="fade-up">
+                {% csrf_token %}
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Name</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-card focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Email</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-card focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Subject</label>
+                    <input type="text" name="subject" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-card focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Message</label>
+                    <textarea name="message" rows="5" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-card focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full px-8 py-4 bg-gradient-to-r from-primary-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg transform hover:scale-[1.02] transition-all">
+                    <i class="fas fa-paper-plane mr-2"></i> Send Message
+                </button>
+            </form>
+            
+            <div class="mt-12 text-center" data-aos="fade-up" data-aos-delay="200">
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Or connect with me on social media</p>
+                <div class="flex justify-center gap-4">
+                    {% if profile.github %}
+                    <a href="{{ profile.github }}" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.linkedin %}
+                    <a href="{{ profile.linkedin }}" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.email %}
+                    <a href="mailto:{{ profile.email }}" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-dark-card hover:bg-primary-600 hover:text-white transition-all">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const text = "{{ profile.title|safe|default:'Data Analyst & Machine Learning Engineer' }}";
+    const typingElement = document.getElementById('typing-text');
+    let index = 0;
+    
+    function type() {
+        if (index < text.length) {
+            typingElement.textContent = text.substring(0, index + 1);
+            index++;
+            setTimeout(type, 100);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        type();
+    });
+</script>
+{% endblock %}

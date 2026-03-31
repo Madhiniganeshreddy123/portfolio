@@ -1,0 +1,150 @@
+{% extends 'accounts/base.html' %}
+
+{% block header %}Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-dark-card rounded-xl p-6 border border-dark-border">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Total Projects</p>
+                <p class="text-3xl font-bold mt-1">{{ total_projects }}</p>
+            </div>
+            <div class="w-12 h-12 bg-primary-600/20 rounded-xl flex items-center justify-center">
+                <i class="fas fa-project-diagram text-primary-500 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-dark-card rounded-xl p-6 border border-dark-border">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Total Skills</p>
+                <p class="text-3xl font-bold mt-1">{{ total_skills }}</p>
+            </div>
+            <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center">
+                <i class="fas fa-code text-purple-500 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-dark-card rounded-xl p-6 border border-dark-border">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Total Messages</p>
+                <p class="text-3xl font-bold mt-1">{{ total_messages }}</p>
+            </div>
+            <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center">
+                <i class="fas fa-envelope text-green-500 text-xl"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-dark-card rounded-xl p-6 border border-dark-border">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-400 text-sm">Unread Messages</p>
+                <p class="text-3xl font-bold mt-1 text-red-500">{{ unread_messages }}</p>
+            </div>
+            <div class="w-12 h-12 bg-red-600/20 rounded-xl flex items-center justify-center">
+                <i class="fas fa-envelope-open-text text-red-500 text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Messages & Quick Actions -->
+<div class="grid lg:grid-cols-2 gap-8">
+    <div class="bg-dark-card rounded-xl border border-dark-border">
+        <div class="px-6 py-4 border-b border-dark-border flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Recent Messages</h3>
+            <a href="/admin/core/message/" class="text-primary-500 hover:text-primary-400 text-sm">View All</a>
+        </div>
+        <div class="divide-y divide-dark-border">
+            {% for msg in recent_messages %}
+            <div class="px-6 py-4 hover:bg-dark-border/30 transition-colors">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="font-medium">{{ msg.name }}</p>
+                        <p class="text-sm text-gray-400">{{ msg.subject }}</p>
+                    </div>
+                    <span class="text-xs text-gray-500">{{ msg.created_at|date:"M d, H:i" }}</span>
+                </div>
+                <p class="text-sm text-gray-400 mt-2 line-clamp-2">{{ msg.message }}</p>
+            </div>
+            {% empty %}
+            <div class="px-6 py-8 text-center text-gray-400">
+                <i class="fas fa-inbox text-4xl mb-3"></i>
+                <p>No messages yet</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="bg-dark-card rounded-xl border border-dark-border">
+        <div class="px-6 py-4 border-b border-dark-border">
+            <h3 class="text-lg font-semibold">Quick Actions</h3>
+        </div>
+        <div class="p-6 grid grid-cols-2 gap-4">
+            <a href="/admin/core/project/add/" class="flex flex-col items-center justify-center p-6 bg-dark-bg rounded-xl border border-dark-border hover:border-primary-500 hover:bg-dark-border/30 transition-all">
+                <i class="fas fa-plus text-2xl text-primary-500 mb-3"></i>
+                <span class="text-sm font-medium">Add Project</span>
+            </a>
+            <a href="/admin/core/skillcategory/" class="flex flex-col items-center justify-center p-6 bg-dark-bg rounded-xl border border-dark-border hover:border-purple-500 hover:bg-dark-border/30 transition-all">
+                <i class="fas fa-code text-2xl text-purple-500 mb-3"></i>
+                <span class="text-sm font-medium">Manage Skills</span>
+            </a>
+            <a href="/admin/core/profile/1/change/" class="flex flex-col items-center justify-center p-6 bg-dark-bg rounded-xl border border-dark-border hover:border-green-500 hover:bg-dark-border/30 transition-all">
+                <i class="fas fa-user-edit text-2xl text-green-500 mb-3"></i>
+                <span class="text-sm font-medium">Edit Profile</span>
+            </a>
+            <a href="/admin/" class="flex flex-col items-center justify-center p-6 bg-dark-bg rounded-xl border border-dark-border hover:border-yellow-500 hover:bg-dark-border/30 transition-all">
+                <i class="fas fa-cogs text-2xl text-yellow-500 mb-3"></i>
+                <span class="text-sm font-medium">Django Admin</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Section -->
+<div class="mt-8 bg-dark-card rounded-xl border border-dark-border p-6">
+    <h3 class="text-lg font-semibold mb-4">Messages Overview</h3>
+    <canvas id="messagesChart" height="100"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const ctx = document.getElementById('messagesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Messages',
+                data: [0, 0, 0, 0, 0, {{ total_messages }}],
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#334155' }
+                },
+                x: {
+                    grid: { color: '#334155' }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
