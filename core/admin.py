@@ -51,7 +51,20 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ["title", "is_featured", "order", "created_at"]
     list_editable = ["is_featured", "order"]
     list_filter = ["is_featured"]
-    search_fields = ["title", "tech_stack"]
+    search_fields = ["title", "tech_stack", "description"]
+    readonly_fields = ["created_at", "updated_at"]
+    ordering = ["order", "-created_at"]
+
+    fieldsets = (
+        ("Basic Information", {"fields": ("title", "description", "tech_stack")}),
+        ("Links", {"fields": ("github_link", "demo_link")}),
+        ("Media", {"fields": ("image",)}),
+        ("Display Options", {"fields": ("is_featured", "order")}),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
+    )
 
 
 @admin.register(Experience)
