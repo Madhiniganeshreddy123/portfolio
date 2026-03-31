@@ -1,0 +1,82 @@
+{% extends 'portfolio/base.html' %}
+{% load static custom_filters %}
+
+{% block title %}All Projects - Madhini Ganesh Reddy{% endblock %}
+
+{% block content %}
+<section id="projects" class="py-20 bg-white dark:bg-dark-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-bold mb-4">My <span class="gradient-text">Projects</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Showcasing all of my work</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for project in projects %}
+            <div class="project-card group relative bg-white dark:bg-dark-card rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}100">
+                <div class="relative h-48 overflow-hidden">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-project-diagram text-5xl text-white/30"></i>
+                    </div>
+                    {% endif %}
+                    <div class="project-overlay absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                        {% if project.demo_link %}
+                        <a href="{{ project.demo_link }}" target="_blank" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-primary-600 hover:text-white transition-all">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% endif %}
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" target="_blank" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-primary-600 hover:text-white transition-all">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <a href="{% url 'project_detail' project.slug %}">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors">{{ project.title }}</h3>
+                    </a>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{{ project.description }}</p>
+                    <div class="flex flex-wrap gap-2">
+                        {% for tech in project.tech_stack|split:"," %}
+                        <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs rounded-full">{{ tech|strip }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <i class="fas fa-folder-open text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <p class="text-gray-500">No projects to display yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if page_obj.has_other_pages %}
+        <div class="flex justify-center mt-12 gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-gray-100 dark:bg-dark-card rounded-lg hover:bg-primary-600 hover:text-white transition-all">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+            <a href="?page={{ num }}" class="px-4 py-2 {% if page_obj.number == num %}bg-primary-600 text-white{% else %}bg-gray-100 dark:bg-dark-card{% endif %} rounded-lg hover:bg-primary-600 hover:text-white transition-all">
+                {{ num }}
+            </a>
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-gray-100 dark:bg-dark-card rounded-lg hover:bg-primary-600 hover:text-white transition-all">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

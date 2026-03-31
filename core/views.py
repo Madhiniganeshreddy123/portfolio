@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (
     TemplateView,
     FormView,
@@ -35,6 +35,25 @@ class HomeView(TemplateView):
         return context
 
 
+class ProjectsView(ListView):
+    model = Project
+    template_name = "portfolio/projects.html"
+    context_object_name = "projects"
+    paginate_by = 9
+
+    def get_queryset(self):
+        return Project.objects.all().order_by("order")
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = "portfolio/project_detail.html"
+    context_object_name = "project"
+
+    def get_object(self):
+        return get_object_or_404(Project, slug=self.kwargs["slug"])
+
+
 class ContactView(CreateView):
     model = Message
     fields = ["name", "email", "subject", "message"]
@@ -46,8 +65,3 @@ class ContactView(CreateView):
             self.request, "Thank you for your message! I will get back to you soon."
         )
         return super().form_valid(form)
-
-
-def project_detail(request, pk):
-    project = Project.objects.get(pk=pk)
-    return render(request, "portfolio/project_detail.html", {"project": project})

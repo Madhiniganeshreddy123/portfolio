@@ -188,7 +188,9 @@
                 </div>
                 
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors">{{ project.title }}</h3>
+                    <a href="{% url 'project_detail' project.slug %}">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary-600 transition-colors">{{ project.title }}</h3>
+                    </a>
                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{{ project.description }}</p>
                     <div class="flex flex-wrap gap-2">
                         {% for tech in project.tech_stack|split:"," %}
@@ -205,10 +207,10 @@
             {% endfor %}
         </div>
         
-        {% if user.is_authenticated %}
+        {% if projects %}
         <div class="text-center mt-12">
-            <a href="/admin/core/project/add/" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700">
-                <i class="fas fa-plus"></i> Add New Project
+            <a href="{% url 'projects' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-all">
+                <i class="fas fa-eye"></i> View All Projects
             </a>
         </div>
         {% endif %}
