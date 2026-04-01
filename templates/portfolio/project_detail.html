@@ -15,7 +15,7 @@
         <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
             {% if project.image %}
             <div class="h-64 md:h-96">
-                <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+                <img src="{% static project.image %}" alt="{{ project.title }}" class="w-full h-full object-cover">
             </div>
             {% else %}
             <div class="h-64 md:h-96 bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
