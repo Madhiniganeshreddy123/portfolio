@@ -124,6 +124,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
+                "image": "projects/dashboard.png",
             },
             {
                 "title": "Multimodal Sentiment Analysis",
@@ -132,6 +133,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
+                "image": "projects/sentiment-analysis.jpeg",
             },
             {
                 "title": "Real-Time QR Code System",
@@ -140,6 +142,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
+                "image": "projects/qr-code.jpeg",
             },
             {
                 "title": "Predictive Analytics Dashboard",
@@ -148,6 +151,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
+                "image": "projects/dashboard.png",
             },
         ]
 

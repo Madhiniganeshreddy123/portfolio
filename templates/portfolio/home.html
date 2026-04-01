@@ -56,9 +56,7 @@
                     {% if profile.profile_image %}
                     <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="relative w-full h-full object-cover rounded-2xl shadow-2xl">
                     {% else %}
-                    <div class="relative w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl flex items-center justify-center">
-                        <i class="fas fa-user text-8xl text-white/50"></i>
-                    </div>
+                    <img src="{% static 'images/profile-image.jpg' %}" alt="{{ profile.name }}" class="relative w-full h-full object-cover rounded-2xl shadow-2xl">
                     {% endif %}
                 </div>
             </div>
@@ -85,9 +83,7 @@
                 {% if profile.profile_image %}
                 <img src="{{ profile.profile_image.url }}" alt="About Me" class="rounded-2xl shadow-2xl w-full">
                 {% else %}
-                <div class="bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl w-full h-80 flex items-center justify-center">
-                    <i class="fas fa-user text-8xl text-white/30"></i>
-                </div>
+                <img src="{% static 'images/profile-image.jpg' %}" alt="About Me" class="rounded-2xl shadow-2xl w-full">
                 {% endif %}
             </div>
             
