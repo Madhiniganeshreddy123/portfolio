@@ -11,7 +11,7 @@ class Profile(models.Model):
         default="Transforming data into actionable insights with Python, ML, and predictive analytics"
     )
     about = models.TextField()
-    profile_image = models.ImageField(upload_to="profile/", blank=True, null=True)
+    profile_image = models.CharField(max_length=255, blank=True, default="")
     resume = models.FileField(upload_to="resume/", blank=True, null=True)
     email = models.EmailField(blank=True)
     linkedin = models.URLField(blank=True)
