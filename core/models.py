@@ -74,7 +74,7 @@ class Project(models.Model):
     )
     github_link = models.URLField(blank=True)
     demo_link = models.URLField(blank=True)
-    image = models.ImageField(upload_to="projects/", blank=True, null=True)
+    image = models.CharField(max_length=255, blank=True, default="")
     is_featured = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
