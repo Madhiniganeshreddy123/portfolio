@@ -13,15 +13,9 @@
         </div>
         
         <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg overflow-hidden" data-aos="fade-up">
-            {% if project.image %}
-            <div class="h-64 md:h-96">
-                <img src="{% static project.image %}" alt="{{ project.title }}" class="w-full h-full object-cover">
-            </div>
-            {% else %}
             <div class="h-64 md:h-96 bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
                 <i class="fas fa-project-diagram text-6xl text-white/30"></i>
             </div>
-            {% endif %}
             
             <div class="p-8">
                 <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ project.title }}</h1>

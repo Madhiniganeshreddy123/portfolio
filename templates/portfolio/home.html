@@ -56,7 +56,9 @@
                     {% if profile.profile_image %}
                     <img src="{% static profile.profile_image %}" alt="{{ profile.name }}" class="relative w-full h-full object-cover rounded-2xl shadow-2xl">
                     {% else %}
-                    <img src="{% static 'images/profile-image.jpg' %}" alt="{{ profile.name }}" class="relative w-full h-full object-cover rounded-2xl shadow-2xl">
+                    <div class="relative w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl flex items-center justify-center">
+                        <i class="fas fa-user text-8xl text-white/50"></i>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -83,7 +85,9 @@
                 {% if profile.profile_image %}
                 <img src="{% static profile.profile_image %}" alt="About Me" class="rounded-2xl shadow-2xl w-full">
                 {% else %}
-                <img src="{% static 'images/profile-image.jpg' %}" alt="About Me" class="rounded-2xl shadow-2xl w-full">
+                <div class="bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl shadow-2xl w-full h-80 flex items-center justify-center">
+                    <i class="fas fa-user text-8xl text-white/30"></i>
+                </div>
                 {% endif %}
             </div>
             
@@ -162,13 +166,9 @@
             {% for project in projects %}
             <div class="project-card group relative bg-white dark:bg-dark-card rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}100">
                 <div class="relative h-48 overflow-hidden">
-                    {% if project.image %}
-                    <img src="{% static project.image %}" alt="{{ project.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                    {% else %}
                     <div class="w-full h-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
                         <i class="fas fa-project-diagram text-5xl text-white/30"></i>
                     </div>
-                    {% endif %}
                     <div class="project-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex items-center justify-center gap-4">
                         {% if project.demo_link %}
                         <a href="{{ project.demo_link }}" target="_blank" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-900 hover:bg-primary-600 hover:text-white transition-all">
