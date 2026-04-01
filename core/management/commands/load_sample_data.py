@@ -1,13 +1,19 @@
 from django.core.management.base import BaseCommand
-from core.models import Project, Profile
+from core.models import Project
 
 
 class Command(BaseCommand):
-    help = "Load or update project and profile data"
+    help = "Fix project images"
 
     def handle(self, *args, **kwargs):
-        # Clear all images first
-        Project.objects.all().update(image="")
-        Profile.objects.all().update(profile_image="")
+        Project.objects.filter(title="Customer Behaviour Analysis").update(
+            image="images/dashboard.png"
+        )
+        Project.objects.filter(title="Multimodal Sentiment Analysis").update(
+            image="images/sentiment-analysis.jpeg"
+        )
+        Project.objects.filter(title="Real-Time QR Code System").update(
+            image="images/qr-code.jpeg"
+        )
 
-        self.stdout.write(self.style.SUCCESS("Data updated successfully!"))
+        self.stdout.write(self.style.SUCCESS("Images fixed successfully!"))
