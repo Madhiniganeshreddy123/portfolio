@@ -144,15 +144,6 @@ class Command(BaseCommand):
                 "is_featured": True,
                 "image": "projects/qr-code.jpeg",
             },
-            {
-                "title": "Predictive Analytics Dashboard",
-                "description": "Interactive dashboard for business KPI visualization and performance tracking. Automated data collection and reporting pipeline.",
-                "tech_stack": "Power BI, Python, SQL, ETL",
-                "github_link": "",
-                "demo_link": "",
-                "is_featured": True,
-                "image": "projects/dashboard.png",
-            },
         ]
 
         for proj_data in projects_data:
