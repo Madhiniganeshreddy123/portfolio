@@ -9,6 +9,7 @@ from django.views.generic import (
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import HttpResponse
 from .models import Profile, SkillCategory, Project, Experience, Education, Message
 
 
@@ -54,14 +55,38 @@ class ProjectDetailView(DetailView):
         return get_object_or_404(Project, slug=self.kwargs["slug"])
 
 
-class ContactView(CreateView):
-    model = Message
-    fields = ["name", "email", "subject", "message"]
-    template_name = "portfolio/contact.html"
-    success_url = "/"
+class ContactView(TemplateView):
+    template_name = "portfolio/home.html"
 
-    def form_valid(self, form):
-        messages.success(
-            self.request, "Thank you for your message! I will get back to you soon."
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.first()
+        skills = SkillCategory.objects.prefetch_related("skills").all()
+        projects = Project.objects.filter(is_featured=True).order_by("order")[:6]
+        experiences = Experience.objects.all()
+        education = Education.objects.all()
+
+        context.update(
+            {
+                "profile": profile,
+                "skill_categories": skills,
+                "projects": projects,
+                "experiences": experiences,
+                "education": education,
+            }
         )
-        return super().form_valid(form)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message_text = request.POST.get("message")
+
+        Message.objects.create(
+            name=name, email=email, subject=subject, message=message_text
+        )
+        messages.success(
+            request, "Thank you for your message! I will get back to you soon."
+        )
+        return redirect("home")
