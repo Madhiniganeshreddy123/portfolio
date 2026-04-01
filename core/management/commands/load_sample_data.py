@@ -124,7 +124,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
-                "image": "projects/dashboard.png",
+                "image": "images/dashboard.png",
             },
             {
                 "title": "Multimodal Sentiment Analysis",
@@ -133,7 +133,7 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
-                "image": "projects/sentiment-analysis.jpeg",
+                "image": "images/sentiment-analysis.jpeg",
             },
             {
                 "title": "Real-Time QR Code System",
@@ -142,13 +142,19 @@ class Command(BaseCommand):
                 "github_link": "",
                 "demo_link": "",
                 "is_featured": True,
-                "image": "projects/qr-code.jpeg",
+                "image": "images/qr-code.jpeg",
             },
         ]
 
         for proj_data in projects_data:
-            Project.objects.create(**proj_data)
-        self.stdout.write(self.style.SUCCESS(f"Created {len(projects_data)} projects"))
+            proj, created = Project.objects.update_or_create(
+                title=proj_data["title"], defaults=proj_data
+            )
+            action = "Created" if created else "Updated"
+            self.stdout.write(self.style.SUCCESS(f"{action} project: {proj.title}"))
+        self.stdout.write(
+            self.style.SUCCESS(f"Processed {len(projects_data)} projects")
+        )
 
         experiences_data = [
             {
