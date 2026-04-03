@@ -10,7 +10,12 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse
+from django.db.models import F
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .models import Profile, SkillCategory, Project, Experience, Education, Message
+from .serializers import ProjectSerializer, ProjectListSerializer
 
 
 class HomeView(TemplateView):
@@ -90,3 +95,20 @@ class ContactView(TemplateView):
             request, "Thank you for your message! I will get back to you soon."
         )
         return redirect("home")
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all().order_by("order")
+    serializer_class = ProjectSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ProjectListSerializer
+        return ProjectSerializer
+
+    @action(detail=False, methods=["post"])
+    def reorder(self, request):
+        order_list = request.data.get("order", [])
+        for idx, project_id in enumerate(order_list):
+            Project.objects.filter(id=project_id).update(order=idx)
+        return Response({"status": "success"})

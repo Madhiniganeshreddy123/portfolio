@@ -49,9 +49,16 @@ class SkillAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ["title", "image_thumbnail", "is_featured", "order", "created_at"]
-    list_editable = ["is_featured", "order"]
-    list_filter = ["is_featured"]
+    list_display = [
+        "title",
+        "category",
+        "image_thumbnail",
+        "is_featured",
+        "order",
+        "created_at",
+    ]
+    list_editable = ["is_featured", "order", "category"]
+    list_filter = ["category", "is_featured"]
     search_fields = ["title", "tech_stack", "description"]
     readonly_fields = ["created_at", "updated_at", "slug"]
     ordering = ["order", "-created_at"]
@@ -59,7 +66,16 @@ class ProjectAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Basic Information",
-            {"fields": ("title", "slug", "description", "tech_stack")},
+            {
+                "fields": (
+                    "title",
+                    "slug",
+                    "category",
+                    "description",
+                    "detailed_description",
+                    "tech_stack",
+                )
+            },
         ),
         ("Links", {"fields": ("github_link", "demo_link")}),
         ("Media", {"fields": ("image",)}),

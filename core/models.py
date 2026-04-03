@@ -66,9 +66,18 @@ from django.utils.text import slugify
 
 
 class Project(models.Model):
+    CATEGORY_CHOICES = [
+        ("analysis", "Analysis"),
+        ("development", "Development"),
+    ]
+
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
+    category = models.CharField(
+        max_length=50, choices=CATEGORY_CHOICES, default="development"
+    )
     description = models.TextField()
+    detailed_description = models.TextField(blank=True)
     tech_stack = models.CharField(
         max_length=500, help_text="Comma separated technologies"
     )
