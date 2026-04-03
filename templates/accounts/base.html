@@ -55,31 +55,31 @@
                 <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'dashboard' %}bg-primary-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-th-large w-5"></i> Dashboard
                 </a>
-                
+                 
                 <a href="{% url 'projects_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'projects_dashboard' %}bg-primary-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-project-diagram w-5"></i> Projects
                 </a>
-                
-                <a href="/admin/core/skillcategory/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-dark-border hover:text-white transition-colors">
+                 
+                <a href="{% url 'skills_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'skills_dashboard' %}bg-purple-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-code w-5"></i> Skills
                 </a>
-                
-                <a href="/admin/core/profile/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-dark-border hover:text-white transition-colors">
+                 
+                <a href="{% url 'profile_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'profile_dashboard' %}bg-green-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-user w-5"></i> Profile
                 </a>
-                
-                <a href="/admin/core/message/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-dark-border hover:text-white transition-colors">
+                 
+                <a href="{% url 'messages_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'messages_dashboard' %}bg-green-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-envelope w-5"></i> Messages
                     {% if unread_messages > 0 %}
                     <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_messages }}</span>
                     {% endif %}
                 </a>
-                
-                <a href="/admin/core/experience/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-dark-border hover:text-white transition-colors">
+                 
+                <a href="{% url 'experience_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'experience_dashboard' %}bg-yellow-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-briefcase w-5"></i> Experience
                 </a>
-                
-                <a href="/admin/core/education/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-dark-border hover:text-white transition-colors">
+                 
+                <a href="{% url 'education_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg {% if request.resolver_match.url_name == 'education_dashboard' %}bg-cyan-600 text-white{% else %}text-gray-400 hover:bg-dark-border hover:text-white{% endif %} transition-colors">
                     <i class="fas fa-graduation-cap w-5"></i> Education
                 </a>
             </nav>

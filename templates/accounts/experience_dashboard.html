@@ -1,0 +1,284 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Experience Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<style>
+    .dashboard-container {
+        background: #0f172a;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-container {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .form-container h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+        margin-bottom: 8px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        color: white;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 0;
+    }
+    
+    .checkbox-group input {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #d97706;
+    }
+    
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+    
+    .experience-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .experience-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 25px;
+        position: relative;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .experience-card.current {
+        border-left-color: #22c55e;
+    }
+    
+    .experience-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .experience-title h3 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+    
+    .experience-title .company {
+        color: #f59e0b;
+        font-weight: 600;
+    }
+    
+    .experience-title .location {
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+    
+    .experience-badge {
+        background: #22c55e;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .experience-dates {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .experience-description {
+        color: #94a3b8;
+        line-height: 1.6;
+    }
+    
+    .experience-actions {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #334155;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        background: #1e293b;
+        border-radius: 12px;
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Experience Dashboard</h1>
+        <p style="color: #94a3b8;">Manage your work experience</p>
+    </div>
+    
+    <div class="form-container">
+        <h2>Add New Experience</h2>
+        <form method="POST" action="{% url 'add_experience' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Job Title *</label>
+                    <input type="text" name="title" required placeholder="e.g., Data Analyst">
+                </div>
+                <div class="form-group">
+                    <label>Company *</label>
+                    <input type="text" name="company" required placeholder="Company Name">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" placeholder="City, Country">
+                </div>
+                <div class="form-group">
+                    <label>Start Date *</label>
+                    <input type="date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" name="end_date">
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" name="order" value="0" min="0">
+                </div>
+                <div class="form-group full-width">
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="is_current" id="is_current">
+                        <label for="is_current">I currently work here</label>
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea name="description" rows="4" placeholder="Describe your responsibilities and achievements..."></textarea>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Experience
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <h2 style="margin-bottom: 20px;">Your Experience</h2>
+    
+    {% if experiences %}
+    <div class="experience-list">
+        {% for exp in experiences %}
+        <div class="experience-card {% if exp.is_current %}current{% endif %}">
+            <div class="experience-header">
+                <div class="experience-title">
+                    <h3>{{ exp.title }}</h3>
+                    <p class="company">{{ exp.company }}</p>
+                    <p class="location">{{ exp.location }}</p>
+                </div>
+                {% if exp.is_current %}
+                <span class="experience-badge">Current</span>
+                {% endif %}
+            </div>
+            <p class="experience-dates">
+                {{ exp.start_date|date:"M Y" }} - 
+                {% if exp.is_current %}
+                Present
+                {% elif exp.end_date %}
+                {{ exp.end_date|date:"M Y" }}
+                {% else %}
+                N/A
+                {% endif %}
+            </p>
+            {% if exp.description %}
+            <p class="experience-description">{{ exp.description }}</p>
+            {% endif %}
+            <div class="experience-actions">
+                <a href="{% url 'delete_experience' exp.id %}" class="btn btn-danger" onclick="return confirm('Delete this experience?')">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-briefcase" style="font-size: 4rem; margin-bottom: 20px;"></i>
+        <h3>No Experience Yet</h3>
+        <p>Add your work experience above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

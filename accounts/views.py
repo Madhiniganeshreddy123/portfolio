@@ -13,6 +13,11 @@ from .models import CustomUser
 
 ContactMessage = apps.get_model("core", "Message")
 Project = apps.get_model("core", "Project")
+Profile = apps.get_model("core", "Profile")
+SkillCategory = apps.get_model("core", "SkillCategory")
+Skill = apps.get_model("core", "Skill")
+Experience = apps.get_model("core", "Experience")
+Education = apps.get_model("core", "Education")
 
 
 def register_view(request):
@@ -145,3 +150,199 @@ def delete_project(request, project_id):
     project.delete()
     messages.success(request, "Project deleted successfully!")
     return redirect("projects_dashboard")
+
+
+# Skills Dashboard
+@login_required
+def skills_dashboard(request):
+    categories = (
+        SkillCategory.objects.prefetch_related("skills").all().order_by("order")
+    )
+    total_skills = Skill.objects.count()
+
+    context = {
+        "categories": categories,
+        "total_skills": total_skills,
+    }
+    return render(request, "accounts/skills_dashboard.html", context)
+
+
+@login_required
+def add_skill_category(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        order = request.POST.get("order", 0)
+        SkillCategory.objects.create(name=name, order=order)
+        messages.success(request, "Category created successfully!")
+    return redirect("skills_dashboard")
+
+
+@login_required
+def add_skill(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        category_id = request.POST.get("category")
+        proficiency = request.POST.get("proficiency", 50)
+        icon = request.POST.get("icon", "")
+        order = request.POST.get("order", 0)
+
+        category = get_object_or_404(SkillCategory, id=category_id)
+        Skill.objects.create(
+            name=name,
+            category=category,
+            proficiency=proficiency,
+            icon=icon,
+            order=order,
+        )
+        messages.success(request, "Skill created successfully!")
+    return redirect("skills_dashboard")
+
+
+@login_required
+def delete_skill(request, skill_id):
+    skill = get_object_or_404(Skill, id=skill_id)
+    skill.delete()
+    messages.success(request, "Skill deleted successfully!")
+    return redirect("skills_dashboard")
+
+
+@login_required
+def delete_skill_category(request, category_id):
+    category = get_object_or_404(SkillCategory, id=category_id)
+    category.delete()
+    messages.success(request, "Category deleted successfully!")
+    return redirect("skills_dashboard")
+
+
+# Profile Dashboard
+@login_required
+def profile_dashboard(request):
+    profile = Profile.objects.first()
+
+    if request.method == "POST":
+        if profile:
+            profile.name = request.POST.get("name", "")
+            profile.title = request.POST.get("title", "")
+            profile.tagline = request.POST.get("tagline", "")
+            profile.about = request.POST.get("about", "")
+            profile.profile_image = request.POST.get("profile_image", "")
+            profile.email = request.POST.get("email", "")
+            profile.linkedin = request.POST.get("linkedin", "")
+            profile.github = request.POST.get("github", "")
+            profile.save()
+        else:
+            Profile.objects.create(
+                name=request.POST.get("name", ""),
+                title=request.POST.get("title", ""),
+                tagline=request.POST.get("tagline", ""),
+                about=request.POST.get("about", ""),
+                profile_image=request.POST.get("profile_image", ""),
+                email=request.POST.get("email", ""),
+                linkedin=request.POST.get("linkedin", ""),
+                github=request.POST.get("github", ""),
+            )
+        messages.success(request, "Profile updated successfully!")
+        return redirect("profile_dashboard")
+
+    context = {"profile": profile}
+    return render(request, "accounts/profile_dashboard.html", context)
+
+
+# Messages Dashboard
+@login_required
+def messages_dashboard(request):
+    all_messages = ContactMessage.objects.all().order_by("-created_at")
+    unread_count = ContactMessage.objects.filter(is_read=False).count()
+
+    context = {
+        "messages": all_messages,
+        "unread_count": unread_count,
+    }
+    return render(request, "accounts/messages_dashboard.html", context)
+
+
+@login_required
+def toggle_message_read(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    message.is_read = not message.is_read
+    message.save()
+    return redirect("messages_dashboard")
+
+
+@login_required
+def delete_message(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    message.delete()
+    messages.success(request, "Message deleted successfully!")
+    return redirect("messages_dashboard")
+
+
+# Experience Dashboard
+@login_required
+def experience_dashboard(request):
+    experiences = Experience.objects.all().order_by("-start_date")
+
+    context = {
+        "experiences": experiences,
+    }
+    return render(request, "accounts/experience_dashboard.html", context)
+
+
+@login_required
+def add_experience(request):
+    if request.method == "POST":
+        Experience.objects.create(
+            title=request.POST.get("title"),
+            company=request.POST.get("company"),
+            location=request.POST.get("location", ""),
+            start_date=request.POST.get("start_date"),
+            end_date=request.POST.get("end_date") or None,
+            is_current=request.POST.get("is_current") == "on",
+            description=request.POST.get("description", ""),
+            order=request.POST.get("order", 0),
+        )
+        messages.success(request, "Experience added successfully!")
+    return redirect("experience_dashboard")
+
+
+@login_required
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, id=experience_id)
+    experience.delete()
+    messages.success(request, "Experience deleted successfully!")
+    return redirect("experience_dashboard")
+
+
+# Education Dashboard
+@login_required
+def education_dashboard(request):
+    educations = Education.objects.all().order_by("-start_year")
+
+    context = {
+        "educations": educations,
+    }
+    return render(request, "accounts/education_dashboard.html", context)
+
+
+@login_required
+def add_education(request):
+    if request.method == "POST":
+        Education.objects.create(
+            degree=request.POST.get("degree"),
+            institution=request.POST.get("institution"),
+            location=request.POST.get("location", ""),
+            start_year=request.POST.get("start_year"),
+            end_year=request.POST.get("end_year") or None,
+            description=request.POST.get("description", ""),
+            order=request.POST.get("order", 0),
+        )
+        messages.success(request, "Education added successfully!")
+    return redirect("education_dashboard")
+
+
+@login_required
+def delete_education(request, education_id):
+    education = get_object_or_404(Education, id=education_id)
+    education.delete()
+    messages.success(request, "Education deleted successfully!")
+    return redirect("education_dashboard")

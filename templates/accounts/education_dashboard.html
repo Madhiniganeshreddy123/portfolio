@@ -1,0 +1,261 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Education Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<style>
+    .dashboard-container {
+        background: #0f172a;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-container {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .form-container h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+        margin-bottom: 8px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        color: white;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: #06b6d4;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0891b2;
+    }
+    
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+    
+    .education-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+    }
+    
+    .education-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 25px;
+        border-top: 4px solid #06b6d4;
+        position: relative;
+    }
+    
+    .education-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .education-icon {
+        width: 50px;
+        height: 50px;
+        background: #06b6d4/20;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #06b6d4;
+        font-size: 1.5rem;
+    }
+    
+    .education-years {
+        background: #0f172a;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .education-degree {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .education-institution {
+        color: #06b6d4;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    .education-location {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .education-description {
+        color: #94a3b8;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    
+    .education-actions {
+        padding-top: 15px;
+        border-top: 1px solid #334155;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        background: #1e293b;
+        border-radius: 12px;
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Education Dashboard</h1>
+        <p style="color: #94a3b8;">Manage your educational background</p>
+    </div>
+    
+    <div class="form-container">
+        <h2>Add New Education</h2>
+        <form method="POST" action="{% url 'add_education' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Degree *</label>
+                    <input type="text" name="degree" required placeholder="e.g., Bachelor of Science">
+                </div>
+                <div class="form-group">
+                    <label>Institution *</label>
+                    <input type="text" name="institution" required placeholder="University Name">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" placeholder="City, Country">
+                </div>
+                <div class="form-group">
+                    <label>Start Year *</label>
+                    <input type="number" name="start_year" required min="1950" max="2030" placeholder="2020">
+                </div>
+                <div class="form-group">
+                    <label>End Year</label>
+                    <input type="number" name="end_year" min="1950" max="2030" placeholder="2024">
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" name="order" value="0" min="0">
+                </div>
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea name="description" rows="3" placeholder="Additional details about your education..."></textarea>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Education
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <h2 style="margin-bottom: 20px;">Your Education</h2>
+    
+    {% if educations %}
+    <div class="education-list">
+        {% for edu in educations %}
+        <div class="education-card">
+            <div class="education-header">
+                <div class="education-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="education-years">
+                    {{ edu.start_year }} - {% if edu.end_year %}{{ edu.end_year }}{% else %}Present{% endif %}
+                </span>
+            </div>
+            <h3 class="education-degree">{{ edu.degree }}</h3>
+            <p class="education-institution">{{ edu.institution }}</p>
+            <p class="education-location">{{ edu.location }}</p>
+            {% if edu.description %}
+            <p class="education-description">{{ edu.description }}</p>
+            {% endif %}
+            <div class="education-actions">
+                <a href="{% url 'delete_education' edu.id %}" class="btn btn-danger" onclick="return confirm('Delete this education?')">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-graduation-cap" style="font-size: 4rem; margin-bottom: 20px;"></i>
+        <h3>No Education Yet</h3>
+        <p>Add your educational background above!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
