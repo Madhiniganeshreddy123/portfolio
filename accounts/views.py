@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,10 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 from .models import CustomUser
 
-Message = apps.get_model("core", "Message")
+ContactMessage = apps.get_model("core", "Message")
 Project = apps.get_model("core", "Project")
 
 
@@ -67,9 +68,19 @@ def logout_view(request):
 def dashboard(request):
     context = {
         "total_projects": Project.objects.count(),
-        "total_messages": Message.objects.count(),
-        "unread_messages": Message.objects.filter(is_read=False).count(),
+        "total_messages": ContactMessage.objects.count(),
+        "unread_messages": ContactMessage.objects.filter(is_read=False).count(),
         "total_skills": apps.get_model("core", "Skill").objects.count(),
-        "recent_messages": Message.objects.order_by("-created_at")[:5],
+        "recent_messages": ContactMessage.objects.order_by("-created_at")[:5],
     }
     return render(request, "accounts/dashboard.html", context)
+
+
+@login_required
+def mark_message_read(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    message.is_read = True
+    message.save()
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"status": "success"})
+    return redirect("dashboard")

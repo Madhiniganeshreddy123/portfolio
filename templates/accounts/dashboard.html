@@ -63,15 +63,21 @@
         </div>
         <div class="divide-y divide-dark-border">
             {% for msg in recent_messages %}
-            <div class="px-6 py-4 hover:bg-dark-border/30 transition-colors">
+            <div class="px-6 py-4 hover:bg-dark-border/30 transition-colors cursor-pointer message-item {% if not msg.is_read %}bg-primary-600/10{% endif %}" data-message-id="{{ msg.id }}">
                 <div class="flex items-start justify-between">
-                    <div>
-                        <p class="font-medium">{{ msg.name }}</p>
-                        <p class="text-sm text-gray-400">{{ msg.subject }}</p>
+                    <div class="flex items-center gap-3">
+                        {% if not msg.is_read %}
+                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                        {% endif %}
+                        <div>
+                            <p class="font-medium">{{ msg.name }}</p>
+                            <p class="text-sm text-gray-400">{{ msg.subject }}</p>
+                        </div>
                     </div>
                     <span class="text-xs text-gray-500">{{ msg.created_at|date:"M d, H:i" }}</span>
                 </div>
                 <p class="text-sm text-gray-400 mt-2 line-clamp-2">{{ msg.message }}</p>
+                <p class="text-xs text-gray-500 mt-2"><i class="fas fa-envelope mr-1"></i>{{ msg.email }}</p>
             </div>
             {% empty %}
             <div class="px-6 py-8 text-center text-gray-400">
@@ -146,5 +152,42 @@
             }
         }
     });
+
+    document.querySelectorAll('.message-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const messageId = this.dataset.messageId;
+            fetch(`/accounts/message/${messageId}/read/`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            }).then(() => {
+                this.classList.remove('bg-primary-600/10');
+                const dot = this.querySelector('.bg-red-500');
+                if (dot) dot.remove();
+                const unreadBadge = document.querySelector('.text-red-500.text-3xl');
+                if (unreadBadge) {
+                    const current = parseInt(unreadBadge.textContent);
+                    if (current > 0) unreadBadge.textContent = current - 1;
+                }
+            });
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 </script>
 {% endblock %}

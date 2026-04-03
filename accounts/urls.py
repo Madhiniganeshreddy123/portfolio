@@ -6,4 +6,9 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("register/", views.register_view, name="register"),
+    path(
+        "message/<int:message_id>/read/",
+        views.mark_message_read,
+        name="mark_message_read",
+    ),
 ]
