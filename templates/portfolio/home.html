@@ -66,6 +66,16 @@
     </div>
 </section>
 
+{% if messages %}
+<div class="container mx-auto px-4 mt-4">
+    {% for message in messages %}
+    <div class="max-w-2xl mx-auto mb-4 px-6 py-4 rounded-xl {% if message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}" role="alert">
+        <p class="font-medium">{{ message }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <!-- About Section -->
 <section id="about" class="py-20 bg-white dark:bg-dark-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -265,7 +275,7 @@
         </div>
         
         <div class="max-w-2xl mx-auto">
-            <form method="post" class="space-y-6" data-aos="fade-up">
+            <form method="post" action="{% url 'contact' %}" class="space-y-6" data-aos="fade-up">
                 {% csrf_token %}
                 <div class="grid sm:grid-cols-2 gap-6">
                     <div>
