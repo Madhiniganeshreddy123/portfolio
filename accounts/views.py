@@ -103,6 +103,10 @@ def projects_dashboard(request):
         return redirect("projects_dashboard")
 
     projects = Project.objects.all().order_by("order")
+    for project in projects:
+        project.tech_stack_list = [
+            t.strip() for t in project.tech_stack.split(",") if t.strip()
+        ]
     total_analysis = Project.objects.filter(category="analysis").count()
     total_development = Project.objects.filter(category="development").count()
 
