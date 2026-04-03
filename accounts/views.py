@@ -84,3 +84,60 @@ def mark_message_read(request, message_id):
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         return JsonResponse({"status": "success"})
     return redirect("dashboard")
+
+
+@login_required
+def projects_dashboard(request):
+    if request.method == "POST":
+        Project.objects.create(
+            title=request.POST.get("title"),
+            category=request.POST.get("category"),
+            description=request.POST.get("description"),
+            detailed_description=request.POST.get("detailed_description", ""),
+            tech_stack=request.POST.get("tech_stack", ""),
+            github_link=request.POST.get("github_link", ""),
+            demo_link=request.POST.get("demo_link", ""),
+            order=request.POST.get("order", 0),
+        )
+        messages.success(request, "Project created successfully!")
+        return redirect("projects_dashboard")
+
+    projects = Project.objects.all().order_by("order")
+    total_analysis = Project.objects.filter(category="analysis").count()
+    total_development = Project.objects.filter(category="development").count()
+
+    context = {
+        "projects": projects,
+        "total_analysis": total_analysis,
+        "total_development": total_development,
+    }
+    return render(request, "accounts/projects_dashboard.html", context)
+
+
+@login_required
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    if request.method == "POST":
+        project.title = request.POST.get("title")
+        project.category = request.POST.get("category")
+        project.description = request.POST.get("description")
+        project.detailed_description = request.POST.get("detailed_description", "")
+        project.tech_stack = request.POST.get("tech_stack", "")
+        project.github_link = request.POST.get("github_link", "")
+        project.demo_link = request.POST.get("demo_link", "")
+        project.order = request.POST.get("order", 0)
+        project.is_featured = request.POST.get("is_featured") == "on"
+        project.save()
+        messages.success(request, "Project updated successfully!")
+        return redirect("projects_dashboard")
+
+    return render(request, "accounts/edit_project.html", {"project": project})
+
+
+@login_required
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    project.delete()
+    messages.success(request, "Project deleted successfully!")
+    return redirect("projects_dashboard")
